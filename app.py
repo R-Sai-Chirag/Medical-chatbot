@@ -46,8 +46,9 @@ prompt=ChatPromptTemplate.from_messages([
     MessagesPlaceholder("history"),
     ("human","{input}")
 ])
+parser = RegexParser(regex=r"^(.*?)&", output_keys=["content"])
 
-chain=create_stuff_documents_chain(prompt=prompt,llm=model)
+chain=create_stuff_documents_chain(prompt=prompt,llm=model,output_parser=parser)
 
 rag_chain=create_retrieval_chain(history_retriever,chain)
 
@@ -57,7 +58,7 @@ rag_chain=RunnableWithMessageHistory(rag_chain,get_session_history,
                                      output_messages_key="answer"
    
 )
-parser = RegexParser(regex=r"^(.*?)&", output_keys=[""])
+
 
 @app.route("/")
 def index():
@@ -69,10 +70,12 @@ def chat():
     input=msg
     print(input)
     response=rag_chain.invoke({"input":msg},
-                              {"configurable":{"session_id":"default"}})["answer"]
-    parsed=parser.parse(response)
-    print("Response : ",parsed)
-    return str(parsed)
+                              {"configurable":{"session_id":"default"}})
+    answer = response["answer"]
+    
+
+    print("Response : ",answer)
+    return str(answer)
 
 
 if __name__=="__main__":
