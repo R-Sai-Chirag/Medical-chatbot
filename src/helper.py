@@ -3,6 +3,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain.schema import Document
+from langchain_core.output_parsers import StrOutputParser
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -24,3 +25,4 @@ def get_session_history(session_id:str):
             if session_id not in store:
                 store["session_id"]=ChatMessageHistory()
                 return store["session_id"]
+
