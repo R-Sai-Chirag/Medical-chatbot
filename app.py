@@ -57,7 +57,7 @@ rag_chain=RunnableWithMessageHistory(rag_chain,get_session_history,
                                      output_messages_key="answer"
    
 )
-parser = RegexParser(regex=r"^(.*?)&", output_keys=["content"])
+parser = StrOutputParser()
 
 @app.route("/")
 def index():
@@ -70,9 +70,9 @@ def chat():
     print(input)
     response=rag_chain.invoke({"input":msg},
                               {"configurable":{"session_id":"default"}})["answer"]
-    response=parser.parse(response)
-    print("Response : ",response["answer"])
-    return str(response["answer"])
+    response=parser.parse(response["answer"])
+    print("Response : ",response)
+    return str(response)
 
 
 if __name__=="__main__":
