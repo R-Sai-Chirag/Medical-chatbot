@@ -9,8 +9,7 @@ COPY requirements.txt .
 
 # Install dependencies
 RUN pip install --upgrade pip \
-    && pip install -r requirements.txt \
-    && apt-get clean
+    && pip install -r requirements.txt 
 
 # Copy application code
 COPY . .
