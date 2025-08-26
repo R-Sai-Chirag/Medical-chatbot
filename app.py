@@ -10,6 +10,7 @@ from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain.schema import HumanMessage, AIMessage
+from src.prompt_enhancer import enhance
 from dotenv import load_dotenv
 from src.prompt import *
 import os
@@ -75,6 +76,11 @@ def chat():
     print("Response : ",response)
     return response["answer"]
 
+@app.route("/enhance",methods=["POST"])
+def enhance_message():
+    user_msg=request.form.get("msg")
+    enhanced=enhance(user_msg)
+    return enhanced
 
 if __name__=="__main__":
     app.run(host="0.0.0.0",port=8000,debug=True)
