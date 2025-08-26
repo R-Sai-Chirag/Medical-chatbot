@@ -44,8 +44,8 @@ history_retriever=create_history_aware_retriever(model,retriever,context_prompt)
 prompt=ChatPromptTemplate.from_messages([
     ("system",system_prompt),
     MessagesPlaceholder("history"),
-    ("human","{input}")
-])
+    ("human","{input}")]
+)
 
 chain=create_stuff_documents_chain(prompt=prompt,llm=model)
 
