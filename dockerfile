@@ -8,9 +8,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    && pip install --upgrade pip \
+RUN pip install --upgrade pip \
     && pip install -r requirements.txt \
     && apt-get clean
 
