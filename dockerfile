@@ -1,7 +1,21 @@
-FROM python:3.10-slim-buster
+# Use Python 3.12 slim image (latest patch, e.g., 3.12.11)
+FROM python:3.12-slim-bookworm
+
+# Set working directory
 WORKDIR /app
+
+# Copy requirements file
 COPY requirements.txt .
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && pip install --upgrade pip \
+    && pip install -r requirements.txt \
+    && apt-get clean
+
+# Copy application code
 COPY . .
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+
+# Command to run the Flask app
 CMD ["python3", "app.py"]
