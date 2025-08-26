@@ -4,15 +4,8 @@ FROM python:3.12-slim-bookworm
 # Set working directory
 WORKDIR /app
 
-# Copy requirements file
-COPY requirements.txt .
+COPY . /app
 
-# Install dependencies
-RUN pip install --upgrade pip \
-    && pip install -r requirements.txt 
+RUN pip install -r requirements.txt
 
-# Copy application code
-COPY . .
-
-# Command to run the Flask app
 CMD ["python3", "app.py"]
