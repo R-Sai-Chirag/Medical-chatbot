@@ -9,8 +9,7 @@ from langchain.chains.retrieval import create_retrieval_chain
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_core.output_parsers import StrOutputParser
-from langchain.output_parsers.regex import RegexParser
+from langchain.schema import HumanMessage, AIMessage
 from dotenv import load_dotenv
 from src.prompt import *
 import os
@@ -46,18 +45,20 @@ prompt=ChatPromptTemplate.from_messages([
     MessagesPlaceholder("history"),
     ("human","{input}")
 ])
-parser = RegexParser(regex=r"^(.*?)&", output_keys=["content"])
 
-chain=create_stuff_documents_chain(prompt=prompt,llm=model,output_parser=parser)
+chain=create_stuff_documents_chain(prompt=prompt,llm=model)
 
 rag_chain=create_retrieval_chain(history_retriever,chain)
+
+
 
 rag_chain=RunnableWithMessageHistory(rag_chain,get_session_history,
                                      input_messages_key="input",
                                      history_messages_key="history",
-                                     output_messages_key="answer"
-   
+                                     output_messages_key="answer",
 )
+
+
 
 
 @app.route("/")
@@ -71,11 +72,8 @@ def chat():
     print(input)
     response=rag_chain.invoke({"input":msg},
                               {"configurable":{"session_id":"default"}})
-    answer = response["answer"]
-    
-
-    print("Response : ",answer)
-    return str(answer)
+    print("Response : ",response)
+    return response["answer"]
 
 
 if __name__=="__main__":
