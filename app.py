@@ -15,8 +15,8 @@ from dotenv import load_dotenv
 from src.prompt import *
 import os
 
-
 app=Flask(__name__)
+
 
 groq_api_key=os.getenv("GRQ_API_KEY")
 PINECONE_API_KEY=os.getenv("PINECONE_API_KEY")
